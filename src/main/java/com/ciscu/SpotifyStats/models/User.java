@@ -2,7 +2,9 @@ package com.ciscu.SpotifyStats.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,14 +35,14 @@ public class User{
     private String spotifyURL;
     
     @JsonIgnoreProperties(value = {"usersArtist"}, allowSetters = true)
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany()
     @JoinTable(name = "user_artist", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_artist"))
-    private List<Artist> artists;
+    private Set<Artist> artists;
     
     @JsonIgnoreProperties(value = {"usersTrack"}, allowSetters = true)
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany()
     @JoinTable(name = "user_track", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_track"))
-    private List<Track> tracks;
+    private Set<Track> tracks;
     
     public String getId() {
         return id;
@@ -82,16 +84,16 @@ public class User{
         this.spotifyURL = spotifyURL;
     }
     
-    public List<Artist> getArtists() {
+    public Set<Artist> getArtists() {
         return artists;
     }
 
-    public void setArtists(List<Artist> artists) {
+    public void setArtists(Set<Artist> artists) {
         this.artists = artists;
         for(Artist a: artists){
-            List<User> users = a.getUsersArtist();
+            Set<User> users = a.getUsersArtist();
             if(users == null){
-                users = new ArrayList<>();
+                users = new HashSet<>();
             }
             if(!users.contains(this)){
                 users.add(this);
@@ -99,16 +101,16 @@ public class User{
         }
     }
 
-    public List<Track> getTracks() {
+    public Set<Track> getTracks() {
         return tracks;
     }
 
-    public void setTracks(List<Track> songs) {
+    public void setTracks(Set<Track> songs) {
         this.tracks = songs;
         for(Track s: songs){
-            List<User> users = s.getUsersTrack();
+            Set<User> users = s.getUsersTrack();
             if(users == null){
-                users = new ArrayList<>();
+                users = new HashSet<>();
             }
             if(!users.contains(this)){
                 users.add(this);

@@ -8,8 +8,10 @@ import com.ciscu.SpotifyStats.repositories.ArtistRepository;
 import com.ciscu.SpotifyStats.repositories.TrackRepository;
 import com.ciscu.SpotifyStats.repositories.UserRepository;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,7 +93,6 @@ public class UserService {
                 newEntity.setSpotifyURL(entity.getSpotifyURL());
                 newEntity.setArtists(entity.getArtists());
                 newEntity.setTracks(entity.getTracks());
-                
                 newEntity = repository.save(newEntity);
                 
                 return newEntity;
@@ -118,13 +119,13 @@ public class UserService {
         
         if(user.isPresent()){
             if(!user.get().getArtists().isEmpty()){
-                List<Artist> artists = user.get().getArtists();
+                Set<Artist> artists = user.get().getArtists();
                 for(Artist a: artists){
                     artistRepository.deleteById(a.getName());
                 }
             }
             if(!user.get().getTracks().isEmpty()){
-                List<Track> tracks = user.get().getTracks();
+                Set<Track> tracks = user.get().getTracks();
                 for(Track t: tracks){
                     trackRepository.deleteById(t.getId());
                 }

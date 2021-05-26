@@ -2,7 +2,9 @@ package com.ciscu.SpotifyStats.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +27,8 @@ public class Artist{
     private String spotifyURL;
     
     @JsonIgnoreProperties(value = {"artists"}, allowSetters = true)
-    @ManyToMany(mappedBy = "artists", cascade = {CascadeType.MERGE})
-    private List<User> usersArtist;
+    @ManyToMany(mappedBy = "artists")
+    private Set<User> usersArtist;
 
     public String getName() {
         return name;
@@ -52,16 +54,16 @@ public class Artist{
         this.spotifyURL = spotifyURL;
     }
     
-    public List<User> getUsersArtist() {
+    public Set<User> getUsersArtist() {
         return usersArtist;
     }
 
-    public void setUsersArtist(List<User> users) {
+    public void setUsersArtist(Set<User> users) {
         this.usersArtist = users;
         for(User u: users){
-            List<Artist> artists = u.getArtists();
+            Set<Artist> artists = u.getArtists();
             if(artists == null){
-                artists = new ArrayList<>();
+                artists = new HashSet<>();
             }
             if(!artists.contains(this)){
                 artists.add(this);
